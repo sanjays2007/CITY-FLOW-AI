@@ -1,0 +1,3100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Traffic Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ====================================================
+       APPLE-INSPIRED DESIGN SYSTEM
+       Clean, minimal, full-width sections, elegant typography
+    ==================================================== */
+    :root {
+      --bg-primary: #fbfbfd;
+      --bg-section-light: #ffffff;
+      --bg-section-dark: #f5f5f7;
+      --bg-section-gray: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --text-light: #f5f5f7;
+      --link-blue: #0071e3;
+      --link-blue-hover: #0077ed;
+      --nav-bg: rgba(29, 29, 31, 0.72);
+      --green: #30d158;
+      --red: #ff453a;
+      --yellow: #ffd60a;
+      --orange: #ff9f0a;
+      --blue: #0a84ff;
+      --teal: #64d2ff;
+      --border-color: #d2d2d7;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --card-shadow-hover: 0 12px 40px rgba(0,0,0,0.12);
+      --transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ====================================================
+       NAVIGATION BAR (Apple-exact replica)
+    ==================================================== */
+    .global-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-container {
+      width: 100%;
+      max-width: 1024px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      color: #1d1d1f;
+      font-size: 18px;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    .nav-logo:hover { opacity: 1; }
+
+    .nav-logo-icon {
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      flex: 1;
+      justify-content: space-evenly;
+    }
+
+    .nav-links li {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #1d1d1f;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 400;
+      padding: 0 18px;
+      line-height: 44px;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.008em;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a.active {
+      opacity: 1;
+      font-weight: 500;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      color: #1d1d1f;
+      font-size: 15px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .nav-icon-btn:hover { opacity: 1; }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #1d1d1f;
+      font-size: 10px;
+      opacity: 0.65;
+    }
+
+    .nav-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: nav-pulse 2s infinite;
+    }
+
+    @keyframes nav-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Promo banner strip below nav (like Apple) */
+    .promo-banner {
+      position: fixed;
+      top: 44px;
+      left: 0;
+      right: 0;
+      z-index: 9998;
+      background: #f5f5f7;
+      border-bottom: 1px solid #d2d2d7;
+      text-align: center;
+      padding: 10px 22px;
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .promo-banner a {
+      color: var(--link-blue);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .promo-banner a:hover {
+      text-decoration: underline;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #1d1d1f;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-mobile-toggle { display: block; }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 44px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(20px);
+        padding: 12px 0;
+        gap: 0;
+        border-bottom: 0.5px solid rgba(0,0,0,0.1);
+      }
+      .nav-links.mobile-open a {
+        font-size: 17px;
+        font-weight: 600;
+        padding: 12px 48px;
+        line-height: 1.2;
+        opacity: 0.92;
+        color: #1d1d1f;
+        border-bottom: 0.5px solid rgba(0,0,0,0.06);
+      }
+    }
+
+    /* ====================================================
+       HERO SECTION
+    ==================================================== */
+    .hero-section {
+      padding: 130px 0 60px;
+      text-align: center;
+      background: var(--bg-section-light);
+      overflow: hidden;
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero-link {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--link-blue);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .hero-link:hover {
+      color: var(--link-blue-hover);
+      text-decoration: underline;
+    }
+
+    .hero-link .arrow {
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .hero-link:hover .arrow {
+      transform: translateX(3px);
+    }
+
+    /* ====================================================
+       PAGE CONTENT SECTIONS (Apple full-width cards)
+    ==================================================== */
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    /* ====================================================
+       SECTION LAYOUT (Apple-style stacked sections)
+    ==================================================== */
+    .section-full {
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .section-full.dark {
+      background: var(--bg-section-dark);
+      color: var(--text-primary);
+    }
+
+    .section-full.gray {
+      background: var(--bg-section-gray);
+    }
+
+    .section-full.white {
+      background: var(--bg-section-light);
+    }
+
+    .section-container {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    .section-wide-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    .section-headline {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .section-subhead {
+      font-size: clamp(16px, 2.5vw, 21px);
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+
+    .dark .section-subhead {
+      color: var(--text-secondary);
+    }
+
+    /* ====================================================
+       DASHBOARD GRID (Apple product-tile style)
+    ==================================================== */
+    .tile-grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .tile-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tile-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tile-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      .tile-grid-3, .tile-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tile-grid-2, .tile-grid-3, .tile-grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ====================================================
+       TILES / CARDS (Apple product card style)
+    ==================================================== */
+    .tile {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      text-align: center;
+      padding: 40px 30px;
+    }
+
+    .dark-tile {
+      background: #ffffff;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .gray-tile {
+      background: var(--bg-section-gray);
+    }
+
+    .tile:hover {
+      transform: scale(1.01);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .tile-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .dark-tile .tile-label {
+      color: var(--text-secondary);
+    }
+
+    .tile-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .tile-desc {
+      font-size: 17px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .dark-tile .tile-desc {
+      color: var(--text-secondary);
+    }
+
+    .tile-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .tile-link {
+      font-size: 17px;
+      color: var(--link-blue);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tile-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ====================================================
+       LIVE FEED CARD (Apple hero-image style)
+    ==================================================== */
+    .feed-card {
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+      padding: 40px 30px 0;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .feed-card .tile-label { color: var(--text-secondary); }
+    .feed-card .tile-desc { color: var(--text-secondary); }
+
+    .feed-video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 740px;
+      margin: 30px auto 0;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feed-video-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .feed-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #86868b;
+      gap: 8px;
+      font-size: 15px;
+      position: absolute;
+      inset: 0;
+    }
+
+    .feed-placeholder-icon {
+      font-size: 48px;
+      opacity: 0.4;
+    }
+
+    .feed-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .feed-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(10px);
+    }
+
+    .feed-tag.live {
+      background: rgba(255, 69, 58, 0.85);
+      color: white;
+    }
+
+    .feed-tag.yolo {
+      background: rgba(10, 132, 255, 0.85);
+      color: white;
+    }
+
+    .tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      animation: nav-pulse 1.2s infinite;
+    }
+
+    .feed-status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      z-index: 5;
+    }
+
+    .feed-status-badge.live {
+      background: rgba(48, 209, 88, 0.85);
+      color: white;
+      animation: nav-pulse 1.5s infinite;
+    }
+
+    .feed-status-badge.offline {
+      background: rgba(134, 134, 139, 0.7);
+      color: white;
+    }
+
+    /* ====================================================
+       METRIC TILES (Apple stat card style)
+    ==================================================== */
+    .metric-tile {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .metric-tile:hover {
+      transform: scale(1.02);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .metric-tile-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .metric-tile-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .metric-tile-value {
+      font-size: 44px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .metric-tile-value.blue { color: var(--blue); }
+    .metric-tile-value.teal { color: var(--teal); }
+    .metric-tile-value.green { color: var(--green); }
+    .metric-tile-value.orange { color: var(--orange); }
+
+    .metric-tile-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    /* ====================================================
+       TRAFFIC SIGNAL CARD
+    ==================================================== */
+    .signal-tile {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      color: var(--text-primary);
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .signal-display-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+    }
+
+    .traffic-light-apple {
+      background: linear-gradient(180deg, #e8e8ed, #d2d2d7);
+      border-radius: 50px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .bulb {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #d2d2d7;
+      border: 2px solid #c7c7cc;
+      transition: all 0.4s ease;
+    }
+
+    .bulb.red.active {
+      background: var(--red);
+      border-color: #ff6961;
+      box-shadow: 0 0 24px var(--red), 0 0 48px rgba(255, 69, 58, 0.4);
+    }
+
+    .bulb.yellow.active {
+      background: var(--yellow);
+      border-color: #ffe066;
+      box-shadow: 0 0 24px var(--yellow), 0 0 48px rgba(255, 214, 10, 0.4);
+    }
+
+    .bulb.green.active {
+      background: var(--green);
+      border-color: #66e085;
+      box-shadow: 0 0 24px var(--green), 0 0 48px rgba(48, 209, 88, 0.4);
+    }
+
+    .signal-info-col {
+      text-align: left;
+    }
+
+    .signal-phase-text {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .signal-timing-row {
+      display: flex;
+      gap: 32px;
+    }
+
+    .signal-timing-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .signal-timing-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .signal-timing-val {
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .signal-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ====================================================
+       CONTROLS SECTION
+    ==================================================== */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--bg-section-gray);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .dark .controls-bar,
+    .feed-card .controls-bar {
+      background: var(--bg-section-gray);
+    }
+
+    .apple-select {
+      padding: 10px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      -webkit-appearance: none;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .apple-select option {
+      background: #ffffff;
+      color: var(--text-primary);
+    }
+
+    /* Light variant */
+    .controls-bar.light {
+      background: var(--bg-section-gray);
+    }
+
+    .controls-bar.light .apple-select {
+      background: white;
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .controls-bar.light .apple-select option {
+      background: white;
+      color: var(--text-primary);
+    }
+
+    .file-wrapper-apple { display: none; }
+
+    .source-status-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .source-status-msg.info {
+      background: rgba(10, 132, 255, 0.1);
+      color: var(--blue);
+    }
+
+    .source-status-msg.success {
+      background: rgba(48, 209, 88, 0.1);
+      color: var(--green);
+    }
+
+    .source-status-msg.warning {
+      background: rgba(255, 159, 10, 0.1);
+      color: var(--orange);
+    }
+
+    .source-status-msg.error {
+      background: rgba(255, 69, 58, 0.1);
+      color: var(--red);
+    }
+
+    .dark .source-status-msg.info {
+      background: rgba(10, 132, 255, 0.15);
+    }
+    .dark .source-status-msg.success {
+      background: rgba(48, 209, 88, 0.15);
+    }
+
+    /* ====================================================
+       APPLE-STYLE BUTTONS
+    ==================================================== */
+    .btn-apple {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 22px;
+      border-radius: 980px;
+      font-size: 14px;
+      font-weight: 400;
+      font-family: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn-apple-blue {
+      background: var(--link-blue);
+      color: white;
+    }
+
+    .btn-apple-blue:hover {
+      background: var(--link-blue-hover);
+    }
+
+    .btn-apple-dark {
+      background: var(--text-primary);
+      color: white;
+    }
+
+    .btn-apple-dark:hover {
+      background: #424245;
+    }
+
+    .btn-apple-outline {
+      background: transparent;
+      color: var(--link-blue);
+      border: 1px solid var(--link-blue);
+    }
+
+    .btn-apple-outline:hover {
+      background: var(--link-blue);
+      color: white;
+    }
+
+    .btn-apple-white {
+      background: var(--bg-section-gray);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-apple-white:hover {
+      background: #e8e8ed;
+    }
+
+    .btn-apple-red {
+      background: rgba(255, 69, 58, 0.12);
+      color: var(--red);
+      border: 1px solid rgba(255, 69, 58, 0.3);
+    }
+
+    .btn-apple-red:hover {
+      background: rgba(255, 69, 58, 0.2);
+    }
+
+    .btn-apple-small {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* ====================================================
+       CYCLE CONTROLS
+    ==================================================== */
+    .cycle-panel {
+      background: var(--bg-section-gray);
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 24px;
+    }
+
+    .cycle-panel-title {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #86868b;
+      margin-bottom: 16px;
+    }
+
+    .cycle-params-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cycle-param label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #86868b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .cycle-param input {
+      width: 100%;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .cycle-param input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+    }
+
+    .cycle-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .cycle-btns .btn-apple { flex: 1; }
+
+    .cycle-progress-bar {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .cycle-progress-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.3s, background 0.3s;
+      background: var(--blue);
+    }
+
+    .cycle-progress-meta {
+      font-size: 11px;
+      color: #86868b;
+      margin-top: 4px;
+    }
+
+    /* ====================================================
+       HISTORY TABLE (Apple-clean table style)
+    ==================================================== */
+    .table-card {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .table-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 28px 16px;
+    }
+
+    .table-card-title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .table-card-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      background: rgba(10, 132, 255, 0.1);
+      color: var(--blue);
+    }
+
+    .apple-table-wrapper {
+      overflow-x: auto;
+      padding: 0 28px 24px;
+    }
+
+    .apple-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    .apple-table th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .apple-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    .apple-table tr:last-child td { border-bottom: none; }
+
+    .apple-table tr:hover td {
+      background: rgba(10, 132, 255, 0.03);
+    }
+
+    .phase-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .phase-badge.ns {
+      background: rgba(10, 132, 255, 0.1);
+      color: var(--blue);
+    }
+
+    .phase-badge.ew {
+      background: rgba(100, 210, 255, 0.15);
+      color: #0891b2;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon { font-size: 40px; opacity: 0.3; margin-bottom: 12px; }
+
+    /* ====================================================
+       SYSTEM INFO
+    ==================================================== */
+    .sysinfo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .sysinfo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .sysinfo-item {
+      text-align: center;
+      padding: 16px 8px;
+      background: var(--bg-section-gray);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .sysinfo-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .sysinfo-val {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ====================================================
+       CAMERAS PAGE
+    ==================================================== */
+    .camera-grid-apple {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .camera-grid-apple { grid-template-columns: 1fr; }
+    }
+
+    .camera-card {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #1a1a1c;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+
+    .camera-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 0 20px rgba(10, 132, 255, 0.2);
+    }
+
+    .camera-card.active {
+      border-color: var(--blue);
+      box-shadow: 0 0 24px rgba(10, 132, 255, 0.3);
+    }
+
+    .camera-card.emergency {
+      border-color: var(--red);
+      animation: cam-emergency 1s infinite;
+    }
+
+    @keyframes cam-emergency {
+      0%, 100% { border-color: var(--red); box-shadow: 0 0 10px rgba(255, 69, 58, 0.5); }
+      50% { border-color: #ff8a80; box-shadow: 0 0 20px rgba(255, 69, 58, 0.8); }
+    }
+
+    .camera-card img { width: 100%; height: 100%; object-fit: cover; }
+
+    .camera-card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 14px 10px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .camera-card-status {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .camera-card-status.online { background: rgba(48, 209, 88, 0.9); color: white; }
+    .camera-card-status.offline { background: rgba(134, 134, 139, 0.9); color: white; }
+
+    /* ====================================================
+       ANALYTICS PAGE
+    ==================================================== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .stats-row { grid-template-columns: 1fr; }
+    }
+
+    .stat-tile {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: left;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .chart-card {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .chart-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .chart-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 300px;
+    }
+
+    /* ====================================================
+       EXPORT PAGE
+    ==================================================== */
+    .export-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .export-grid { grid-template-columns: 1fr; }
+    }
+
+    .export-tile {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .export-tile:hover {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .export-icon { font-size: 36px; margin-bottom: 16px; }
+    .export-title { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+    .export-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .date-row span { color: var(--text-secondary); font-size: 14px; }
+
+    .apple-date {
+      padding: 9px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      color: var(--text-primary);
+    }
+
+    .apple-date:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+    }
+
+    /* ====================================================
+       EMERGENCY ALERT (Apple notification style)
+    ==================================================== */
+    .emergency-banner {
+      display: none;
+      position: fixed;
+      top: 84px;
+      left: 0;
+      right: 0;
+      z-index: 9998;
+      background: linear-gradient(135deg, #ff453a, #d32f2f);
+      color: white;
+      padding: 14px 24px;
+      animation: em-pulse 1s ease-in-out infinite;
+    }
+
+    .emergency-banner.active {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @keyframes em-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.88; }
+    }
+
+    .em-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .em-icon {
+      font-size: 28px;
+      animation: em-shake 0.5s ease-in-out infinite;
+    }
+
+    @keyframes em-shake {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .em-title { font-size: 16px; font-weight: 700; }
+    .em-desc { font-size: 13px; opacity: 0.9; }
+
+    .em-actions { display: flex; gap: 8px; }
+
+    .em-btn {
+      padding: 8px 18px;
+      border-radius: 980px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-family: inherit;
+    }
+
+    .em-btn:hover { background: rgba(255,255,255,0.25); }
+
+    .em-btn.primary {
+      background: white;
+      color: #d32f2f;
+      border-color: white;
+    }
+
+    /* ====================================================
+       MODAL (Apple sheet style)
+    ==================================================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-sheet {
+      background: var(--bg-section-light);
+      border-radius: 20px;
+      padding: 28px;
+      width: 90%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-sheet-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .modal-close-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-section-gray);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .modal-close-btn:hover { background: #e8e8ed; }
+
+    .form-field {
+      margin-bottom: 16px;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      color: var(--text-primary);
+    }
+
+    .form-field input:focus,
+    .form-field select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    /* ====================================================
+       SPEED CONTROL
+    ==================================================== */
+    .speed-control-strip {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-section-gray);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .speed-control-strip input[type="range"] {
+      flex: 1;
+      cursor: pointer;
+      accent-color: var(--blue);
+    }
+
+    .speed-label-pill {
+      padding: 3px 10px;
+      background: var(--blue);
+      color: white;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ====================================================
+       APPLE FOOTER
+    ==================================================== */
+    .apple-footer {
+      background: var(--bg-section-gray);
+      padding: 20px 0;
+      border-top: 1px solid var(--border-color);
+      margin-top: 0;
+    }
+
+    .footer-container {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-brand {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-tech-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: white;
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ====================================================
+       SCROLLBAR
+    ==================================================== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a1a1a6; }
+
+    /* ====================================================
+       ANIMATIONS
+    ==================================================== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       EMERGENCY ALERT BANNER
+  ============================================ -->
+  <div class="emergency-banner" id="emergencyAlert">
+    <div class="em-content">
+      <span class="em-icon">🚨</span>
+      <div>
+        <div class="em-title">EMERGENCY VEHICLE DETECTED</div>
+        <div class="em-desc" id="emergencyDetails">Ambulance approaching from North — Priority signal activated</div>
+      </div>
+    </div>
+    <div class="em-actions">
+      <button class="em-btn" id="dismissEmergency">Dismiss</button>
+      <button class="em-btn primary" id="acknowledgeEmergency">Acknowledge</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ADD CAMERA MODAL
+  ============================================ -->
+  <div class="modal-overlay" id="addCameraModal">
+    <div class="modal-sheet">
+      <div class="modal-sheet-header">
+        <div class="modal-sheet-title">Add Camera Source</div>
+        <button class="modal-close-btn" id="closeAddCamera">&times;</button>
+      </div>
+      <div class="form-field">
+        <label>Camera Name</label>
+        <input type="text" id="newCameraName" placeholder="e.g., North Intersection">
+      </div>
+      <div class="form-field">
+        <label>Intersection Name</label>
+        <input type="text" id="newCameraIntersection" placeholder="e.g., Main St & 5th Ave">
+      </div>
+      <div class="form-field">
+        <label>Source Type</label>
+        <select id="newCameraType">
+          <option value="webcam">Webcam</option>
+          <option value="video">Video File</option>
+          <option value="rtsp">RTSP Stream</option>
+        </select>
+      </div>
+      <div class="form-field" id="webcamSourceGroup">
+        <label>Webcam Index</label>
+        <input type="number" id="newCameraWebcamIndex" value="0" min="0">
+      </div>
+      <div class="form-field" id="videoSourceGroup" style="display:none;">
+        <label>Video Path</label>
+        <input type="text" id="newCameraVideoPath" placeholder="Path to video file">
+      </div>
+      <div class="form-field" id="rtspSourceGroup" style="display:none;">
+        <label>RTSP URL</label>
+        <input type="text" id="newCameraRtspUrl" placeholder="rtsp://...">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-apple btn-apple-outline btn-apple-small" id="cancelAddCamera">Cancel</button>
+        <button class="btn-apple btn-apple-blue btn-apple-small" id="confirmAddCamera">Add Camera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       NAVIGATION BAR
+  ============================================ -->
+  <nav class="global-nav">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="nav-logo-icon">🚦</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a class="active" data-page="dashboard">Dashboard</a></li>
+        <li><a data-page="cameras">Cameras</a></li>
+        <li><a data-page="analytics">Analytics</a></li>
+        <li><a data-page="export">Export</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="nav-status">
+          <span class="nav-status-dot"></span>
+          <span id="systemStatus">System Ready</span>
+        </div>
+        <button class="nav-icon-btn" title="Search"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="44" viewBox="0 0 15 44"><path d="M14.298 27.202l-3.87-3.87c.701-.929 1.122-2.081 1.122-3.332 0-3.021-2.479-5.5-5.5-5.5S.55 16.979.55 20s2.479 5.5 5.5 5.5c1.251 0 2.403-.421 3.332-1.122l3.87 3.87a.749.749 0 001.046 0 .749.749 0 000-1.046zM2.05 20c0-2.192 1.808-4 4-4s4 1.808 4 4-1.808 4-4 4-4-1.808-4-4z" fill="currentColor"/></svg></button>
+        <button class="nav-icon-btn" title="Bag"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="44" viewBox="0 0 14 44"><path d="M11.3 16.018H2.7A1.7 1.7 0 001 17.718v8.565a1.7 1.7 0 001.7 1.7h8.6a1.7 1.7 0 001.7-1.7v-8.565a1.7 1.7 0 00-1.7-1.7zm-4.3-3.5a2.013 2.013 0 012.012 2.012v.988H5.988v-.988A2.013 2.013 0 018 12.518zm3.8 4v.75a.25.25 0 01-.5 0v-.75h-2.5v.75a.25.25 0 01-.5 0v-.75h-2.5v.75a.25.25 0 01-.5 0v-.75H3.2v8.765a1.2 1.2 0 001.2 1.2h5.2a1.2 1.2 0 001.2-1.2v-8.765zm-3.3-3.5a1.513 1.513 0 00-1.512 1.512v.988h3.024v-.988A1.513 1.513 0 007.5 13.018z" fill="currentColor"/></svg></button>
+        <button class="nav-mobile-toggle" id="mobileNavToggle">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Promo Banner (Apple-style strip below nav) -->
+  <div class="promo-banner">
+    AI-powered traffic management with YOLOv8 real-time detection and adaptive signal control. <a href="#" data-page="dashboard">Start monitoring ›</a>
+  </div>
+
+  <!-- ============================================
+       HERO SECTION
+  ============================================ -->
+  <section class="hero-section">
+    <div class="section-container">
+      <h1 class="hero-title animate-in">Smart Traffic <span>Management</span></h1>
+      <p class="hero-subtitle animate-in delay-1">AI-powered real-time vehicle detection and adaptive signal control.</p>
+      <div class="hero-links animate-in delay-2">
+        <a class="hero-link" data-page="dashboard">View Dashboard <span class="arrow">›</span></a>
+        <a class="hero-link" data-page="analytics">View Analytics <span class="arrow">›</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       DASHBOARD PAGE
+  ============================================ -->
+  <div class="page-section active" id="page-dashboard">
+
+    <!-- Live Detection Feed (full-width dark card like Apple hero) -->
+    <section class="section-full" style="padding-top: 0; padding-bottom: 16px;">
+      <div class="section-wide-container">
+        <div class="feed-card">
+          <div class="tile-label">Live Detection</div>
+          <div class="tile-title">Real-Time YOLO Feed</div>
+          <div class="tile-desc">Vehicle detection powered by YOLOv8 + ByteTrack</div>
+
+          <!-- Source Controls -->
+          <div class="controls-bar" style="max-width: 700px; margin: 0 auto 16px;">
+            <select class="apple-select" id="sourceType">
+              <option value="webcam">📷 Webcam (Live)</option>
+              <option value="video">🎬 Video File</option>
+            </select>
+            <div class="file-wrapper-apple" id="fileWrapper">
+              <input type="file" id="videoFileInput" accept="video/*" style="display:none;">
+              <button class="btn-apple btn-apple-white btn-apple-small" id="selectVideoBtn">📂 Browse</button>
+            </div>
+            <span id="videoFileName" style="font-size: 12px; color: var(--text-secondary);"></span>
+            <button class="btn-apple btn-apple-white btn-apple-small" id="stopSourceBtn">⏹ Stop</button>
+            <button class="btn-apple btn-apple-blue btn-apple-small" id="applySourceBtn">▶ Start</button>
+          </div>
+
+          <!-- Speed Control (video only) -->
+          <div class="speed-control-strip" id="speedControl" style="max-width: 700px; margin: 0 auto 16px;">
+            ⚡ Speed:
+            <input type="range" id="skipFramesSlider" min="1" max="5" value="2">
+            <span class="speed-label-pill" id="speedLabel">Normal</span>
+          </div>
+
+          <!-- Source Status -->
+          <div class="source-status-msg" id="sourceStatus" style="max-width: 700px; margin: 0 auto 16px;">
+            <span id="sourceStatusText">Ready</span>
+          </div>
+
+          <!-- Video Display -->
+          <div class="feed-video-wrapper">
+            <div class="feed-badge" id="videoOverlay" style="display: none;">
+              <div class="feed-tag live"><span class="tag-dot"></span> REC</div>
+              <div class="feed-tag yolo">YOLO</div>
+            </div>
+            <div class="feed-status-badge offline" id="cameraStatus">OFFLINE</div>
+            <img id="trafficImage" src="" alt="" style="display: none;">
+            <div class="feed-placeholder" id="videoPlaceholder">
+              <div class="feed-placeholder-icon">📹</div>
+              <div>No video feed active</div>
+              <div style="font-size: 12px; opacity: 0.6;">Click "Start" to begin detection</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics Row (Apple product tile grid style) -->
+    <section class="section-full gray" style="padding-top: 16px; padding-bottom: 16px;">
+      <div class="section-wide-container">
+        <div class="tile-grid tile-grid-4">
+
+          <!-- NS Vehicle Count -->
+          <div class="metric-tile animate-in delay-1">
+            <div class="metric-tile-icon">🚗</div>
+            <div class="metric-tile-label">North–South Volume</div>
+            <div class="metric-tile-value blue" id="vehicleCountNS">0</div>
+            <div class="metric-tile-desc">Upper detection zone</div>
+          </div>
+
+          <!-- EW Vehicle Count -->
+          <div class="metric-tile animate-in delay-2">
+            <div class="metric-tile-icon">🚙</div>
+            <div class="metric-tile-label">East–West Volume</div>
+            <div class="metric-tile-value teal" id="vehicleCountEW">0</div>
+            <div class="metric-tile-desc">Lower detection zone</div>
+          </div>
+
+          <!-- Green Time -->
+          <div class="metric-tile animate-in delay-3">
+            <div class="metric-tile-icon">⏱️</div>
+            <div class="metric-tile-label">Green Time</div>
+            <div class="metric-tile-value green" id="greenTimeMetric">—</div>
+            <div class="metric-tile-desc">Current signal duration</div>
+          </div>
+
+          <!-- Remaining -->
+          <div class="metric-tile animate-in delay-4">
+            <div class="metric-tile-icon">⏳</div>
+            <div class="metric-tile-label">Remaining</div>
+            <div class="metric-tile-value orange" id="remainingMetric">—</div>
+            <div class="metric-tile-desc">Time left in phase</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signal Controller + System Info (two-tile row) -->
+    <section class="section-full" style="padding-top: 16px; padding-bottom: 16px;">
+      <div class="section-wide-container">
+        <div class="tile-grid tile-grid-2">
+
+          <!-- Traffic Signal Tile -->
+          <div class="signal-tile">
+            <div class="tile-label">Signal Cycle Controller</div>
+            <div class="tile-title" style="font-size: 24px; margin-bottom: 0;">
+              Traffic Signal
+              <span class="table-card-badge" id="cycleStatusBadge" style="font-size: 11px; margin-left: 8px; vertical-align: middle;">IDLE</span>
+            </div>
+
+            <div class="signal-display-row">
+              <div class="traffic-light-apple">
+                <div class="bulb red" id="bulbRed"></div>
+                <div class="bulb yellow" id="bulbYellow"></div>
+                <div class="bulb green" id="bulbGreen"></div>
+              </div>
+              <div class="signal-info-col">
+                <div class="signal-phase-text" id="phaseText">—</div>
+                <div class="signal-timing-row">
+                  <div class="signal-timing-item">
+                    <span class="signal-timing-label">Remaining</span>
+                    <span class="signal-timing-val" id="remainingTime">—</span>
+                  </div>
+                  <div class="signal-timing-item">
+                    <span class="signal-timing-label">Total Time</span>
+                    <span class="signal-timing-val" id="greenTime">—</span>
+                  </div>
+                </div>
+                <div class="signal-meta">
+                  <span>Direction: <strong id="currentDirection">—</strong></span>
+                  <span>Cycle #<strong id="cycleNumber">0</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cycle Controls -->
+            <div class="cycle-panel">
+              <div class="cycle-panel-title">Cycle Parameters</div>
+              <div class="cycle-params-grid">
+                <div class="cycle-param">
+                  <label>Vehicle Threshold</label>
+                  <input type="number" id="vehicleThreshold" value="30" min="5" max="100">
+                </div>
+                <div class="cycle-param">
+                  <label>Max Detection (sec)</label>
+                  <input type="number" id="maxDetectionTime" value="60" min="10" max="180">
+                </div>
+              </div>
+              <div class="cycle-btns">
+                <button class="btn-apple btn-apple-blue" id="startCycleBtn" onclick="startSignalCycle()">▶ Start Cycle</button>
+                <button class="btn-apple btn-apple-white" id="stopCycleBtn" onclick="stopSignalCycle()" disabled>⏹ Stop</button>
+              </div>
+              <div class="cycle-progress-bar" id="cycleProgress">
+                <div class="cycle-progress-label" id="cyclePhaseText">Ready</div>
+                <div class="progress-track">
+                  <div class="progress-fill" id="cycleProgressBar"></div>
+                </div>
+                <div class="cycle-progress-meta">
+                  Vehicles: <strong id="detectedCount">0</strong> / <span id="thresholdDisplay">30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Info Tile -->
+          <div class="signal-tile" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="tile-label">Technology Stack</div>
+              <div class="tile-title" style="font-size: 24px;">System Information</div>
+              <div class="tile-desc" style="font-size: 15px;">
+                Powered by cutting-edge AI and computer vision technology.
+              </div>
+            </div>
+            <div class="sysinfo-grid">
+              <div class="sysinfo-item">
+                <div class="sysinfo-label">Model</div>
+                <div class="sysinfo-val">YOLOv8n</div>
+              </div>
+              <div class="sysinfo-item">
+                <div class="sysinfo-label">Tracker</div>
+                <div class="sysinfo-val">ByteTrack</div>
+              </div>
+              <div class="sysinfo-item">
+                <div class="sysinfo-label">Backend</div>
+                <div class="sysinfo-val">Flask</div>
+              </div>
+              <div class="sysinfo-item">
+                <div class="sysinfo-label">Vision</div>
+                <div class="sysinfo-val">OpenCV</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detection History -->
+    <section class="section-full gray" style="padding-top: 16px; padding-bottom: 40px;">
+      <div class="section-wide-container">
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-card-title">Detection History</div>
+            <div class="table-card-badge">Last 10 Cycles</div>
+          </div>
+          <div class="apple-table-wrapper">
+            <table class="apple-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Phase</th>
+                  <th>NS Count</th>
+                  <th>EW Count</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <div class="empty-state-icon">📊</div>
+                    <div>No detection history yet</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- End Dashboard -->
+
+  <!-- ============================================
+       CAMERAS PAGE
+  ============================================ -->
+  <div class="page-section" id="page-cameras">
+
+    <section class="section-full gray" style="padding-top: 24px;">
+      <div class="section-wide-container">
+        <div class="section-headline" style="text-align: left; margin-bottom: 4px;">Camera Management</div>
+        <div class="section-subhead" style="text-align: left; margin-bottom: 20px;">Monitor multiple intersections simultaneously.</div>
+
+        <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+          <span class="btn-apple btn-apple-red btn-apple-small" id="priorityIndicator" style="display: none;">
+            🚨 Priority Mode Active
+          </span>
+          <button class="btn-apple btn-apple-outline btn-apple-small" onclick="refreshCameras()">🔄 Refresh</button>
+          <button class="btn-apple btn-apple-blue btn-apple-small" onclick="openAddCameraModal()">➕ Add Camera</button>
+        </div>
+
+        <div class="tile-grid tile-grid-2">
+
+          <!-- Active Camera Feed -->
+          <div class="feed-card" style="padding-bottom: 0;">
+            <div class="tile-label">Active Camera</div>
+            <div class="tile-title" style="font-size: 20px;" id="activeCameraTitle">Main Camera</div>
+            <div class="feed-video-wrapper" style="max-width: 100%; border-radius: 12px 12px 0 0; margin-top: 16px;">
+              <div class="feed-status-badge live" id="activeCameraStatus">LIVE</div>
+              <img id="multiCamImage" src="/image" alt="Camera Feed" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+
+          <!-- Side Panel -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+
+            <!-- Camera Stats -->
+            <div class="tile" style="padding: 24px; text-align: left;">
+              <div class="tile-label">Camera Statistics</div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;">
+                <div>
+                  <div class="metric-tile-label">Active</div>
+                  <div class="metric-tile-value blue" style="font-size: 32px;" id="activeCameraCount">1</div>
+                </div>
+                <div>
+                  <div class="metric-tile-label">Total</div>
+                  <div class="metric-tile-value" style="font-size: 32px; color: var(--text-primary);" id="totalCameraCount">1</div>
+                </div>
+                <div>
+                  <div class="metric-tile-label">Alerts</div>
+                  <div class="metric-tile-value" style="font-size: 32px; color: var(--red);" id="emergencyAlertCount">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Status -->
+            <div class="tile dark-tile" style="padding: 24px; text-align: left;">
+              <div class="tile-label">Emergency Detection</div>
+              <div style="display: grid; gap: 8px; margin-top: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13px; color: var(--text-secondary);">Status</span>
+                  <span id="emergencyStatus" style="font-weight: 600; color: var(--green);">Normal</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13px; color: var(--text-secondary);">Confidence</span>
+                  <span id="emergencyConfidence" style="font-weight: 600;">0%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13px; color: var(--text-secondary);">Priority Dir.</span>
+                  <span id="emergencyDirection" style="font-weight: 600;">—</span>
+                </div>
+              </div>
+              <button class="btn-apple btn-apple-red btn-apple-small" style="width: 100%; margin-top: 16px;" onclick="testEmergency()">🚨 Test Emergency</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="tile" style="padding: 24px; text-align: left;">
+              <div class="tile-label">Quick Actions</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <button class="btn-apple btn-apple-outline btn-apple-small" style="width: 100%;" onclick="openAddCameraModal()">➕ Add Webcam</button>
+                <button class="btn-apple btn-apple-outline btn-apple-small" style="width: 100%;" onclick="addVideoCamera()">📹 Add Video File</button>
+                <button class="btn-apple btn-apple-outline btn-apple-small" style="width: 100%;" onclick="clearEmergency()">✓ Clear All Alerts</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Camera Grid -->
+        <div class="table-card" style="margin-top: 16px;">
+          <div class="table-card-header">
+            <div class="table-card-title">All Cameras</div>
+          </div>
+          <div style="padding: 0 28px 24px;">
+            <div class="camera-grid-apple" id="cameraGrid">
+              <div class="camera-card active" data-camera="cam_main">
+                <div class="camera-card-status online">LIVE</div>
+                <div class="camera-card-label">Main Intersection</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- End Cameras -->
+
+  <!-- ============================================
+       ANALYTICS PAGE
+  ============================================ -->
+  <div class="page-section" id="page-analytics">
+
+    <section class="section-full gray" style="padding-top: 24px;">
+      <div class="section-wide-container">
+        <div class="section-headline" style="text-align: left; margin-bottom: 4px;">Traffic Analytics</div>
+        <div class="section-subhead" style="text-align: left; margin-bottom: 24px;">Historical data analysis and trends.</div>
+
+        <div style="margin-bottom: 16px; text-align: right;">
+          <button class="btn-apple btn-apple-outline btn-apple-small" onclick="refreshAnalytics()">🔄 Refresh</button>
+        </div>
+
+        <!-- Today's Stats -->
+        <div class="stats-row">
+          <div class="stat-tile">
+            <div class="stat-label">Total Vehicles Today</div>
+            <div class="stat-value" style="color: var(--blue);" id="statTotalVehicles">0</div>
+            <div class="stat-desc">NS + EW combined</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">North-South Total</div>
+            <div class="stat-value" style="color: var(--blue);" id="statNS">0</div>
+            <div class="stat-desc">Upper detection zone</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">East-West Total</div>
+            <div class="stat-value" style="color: var(--teal);" id="statEW">0</div>
+            <div class="stat-desc">Lower detection zone</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Detection Records</div>
+            <div class="stat-value" style="color: #bf5af2;" id="statRecords">0</div>
+            <div class="stat-desc">Total data points today</div>
+          </div>
+        </div>
+
+        <!-- Hourly Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Hourly Traffic Volume</div>
+            <select class="apple-date" id="chartDateSelect" style="padding: 6px 12px;">
+              <option value="">Today</option>
+            </select>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="hourlyChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Weekly Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Weekly Summary</div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="weeklyChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Weekly Table -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-card-title">7-Day Breakdown</div>
+          </div>
+          <div class="apple-table-wrapper">
+            <table class="apple-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Total Vehicles</th>
+                  <th>NS Count</th>
+                  <th>EW Count</th>
+                  <th>Records</th>
+                </tr>
+              </thead>
+              <tbody id="weeklyTableBody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- End Analytics -->
+
+  <!-- ============================================
+       EXPORT PAGE
+  ============================================ -->
+  <div class="page-section" id="page-export">
+
+    <section class="section-full gray" style="padding-top: 24px;">
+      <div class="section-wide-container">
+        <div class="section-headline" style="text-align: left; margin-bottom: 4px;">Export Data</div>
+        <div class="section-subhead" style="text-align: left; margin-bottom: 24px;">Download traffic reports and data.</div>
+
+        <div class="export-grid" style="margin-bottom: 24px;">
+          <!-- CSV -->
+          <div class="export-tile">
+            <div class="export-icon">📊</div>
+            <div class="export-title">CSV Export</div>
+            <div class="export-desc">Download raw data in spreadsheet format. Perfect for Excel or data analysis.</div>
+            <div class="date-row">
+              <input type="date" class="apple-date" id="csvStartDate">
+              <span>to</span>
+              <input type="date" class="apple-date" id="csvEndDate">
+            </div>
+            <button class="btn-apple btn-apple-blue btn-apple-small" onclick="exportCSV()">📥 Download CSV</button>
+          </div>
+
+          <!-- PDF -->
+          <div class="export-tile">
+            <div class="export-icon">📄</div>
+            <div class="export-title">PDF Report</div>
+            <div class="export-desc">Generate a formatted report with statistics and summaries.</div>
+            <div class="date-row">
+              <input type="date" class="apple-date" id="pdfStartDate">
+              <span>to</span>
+              <input type="date" class="apple-date" id="pdfEndDate">
+            </div>
+            <button class="btn-apple btn-apple-blue btn-apple-small" onclick="exportPDF()">📥 Download PDF</button>
+          </div>
+        </div>
+
+        <!-- DB Info -->
+        <div class="table-card" style="padding: 28px;">
+          <div class="table-card-title" style="margin-bottom: 4px;">Database Information</div>
+          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">Current database statistics and status.</div>
+          <div class="stats-row">
+            <div class="stat-tile gray-tile">
+              <div class="stat-label">Database</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--text-primary);">SQLite</div>
+              <div class="stat-desc">traffic_data.db</div>
+            </div>
+            <div class="stat-tile gray-tile">
+              <div class="stat-label">Total Records</div>
+              <div class="stat-value" style="color: var(--blue);" id="dbTotalRecords">—</div>
+              <div class="stat-desc">All time</div>
+            </div>
+            <div class="stat-tile gray-tile">
+              <div class="stat-label">First Record</div>
+              <div class="stat-value" style="font-size: 16px; color: var(--text-primary);" id="dbFirstRecord">—</div>
+              <div class="stat-desc">Earliest entry</div>
+            </div>
+            <div class="stat-tile gray-tile">
+              <div class="stat-label">Last Record</div>
+              <div class="stat-value" style="font-size: 16px; color: var(--text-primary);" id="dbLastRecord">—</div>
+              <div class="stat-desc">Latest entry</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- End Export -->
+
+  <!-- ============================================
+       APPLE-STYLE FOOTER
+  ============================================ -->
+  <footer class="apple-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">© 2026 Smart Traffic Management System</div>
+        <div class="footer-tech-badges">
+          <span class="tech-pill">🐍 Python</span>
+          <span class="tech-pill">🎯 YOLOv8</span>
+          <span class="tech-pill">👁️ Supervision</span>
+          <span class="tech-pill">🌐 Flask</span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>India</span>
+        <div class="footer-links">
+          <a href="#" data-page="dashboard">Dashboard</a>
+          <a href="#" data-page="cameras">Cameras</a>
+          <a href="#" data-page="analytics">Analytics</a>
+          <a href="#" data-page="export">Export</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       JAVASCRIPT — ALL ORIGINAL FUNCTIONALITY PRESERVED
+  ============================================ -->
+  <script>
+    // ========================================
+    // PAGE NAVIGATION
+    // ========================================
+    const navAnchors = document.querySelectorAll('[data-page]');
+    const pages = document.querySelectorAll('.page-section');
+
+    function navigateTo(targetPage) {
+      // Update nav active
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll(`.nav-links a[data-page="${targetPage}"]`).forEach(a => a.classList.add('active'));
+
+      // Show page
+      pages.forEach(p => p.classList.remove('active'));
+      const pageEl = document.getElementById('page-' + targetPage);
+      if (pageEl) {
+        pageEl.classList.add('active');
+        if (targetPage === 'analytics') refreshAnalytics();
+        if (targetPage === 'export') loadExportInfo();
+      }
+
+      // Close mobile nav
+      document.getElementById('navLinks').classList.remove('mobile-open');
+
+      // Scroll to top of content
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    }
+
+    navAnchors.forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const page = this.dataset.page;
+        if (page) navigateTo(page);
+      });
+    });
+
+    // Mobile nav toggle
+    document.getElementById('mobileNavToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('mobile-open');
+    });
+
+    // ========================================
+    // STATUS UPDATE
+    // ========================================
+    function updateTrafficLight(phase) {
+      const red = document.getElementById('bulbRed');
+      const yellow = document.getElementById('bulbYellow');
+      const green = document.getElementById('bulbGreen');
+
+      red.classList.remove('active');
+      yellow.classList.remove('active');
+      green.classList.remove('active');
+
+      if (phase === 'NS' || phase === 'EW') {
+        green.classList.add('active');
+      } else if (phase === 'YELLOW') {
+        yellow.classList.add('active');
+      } else {
+        red.classList.add('active');
+      }
+    }
+
+    function getLoadClass(ns, ew) {
+      const total = ns + ew;
+      if (total === 0) return { text: "FREE", class: "load-free" };
+      if (total <= 5) return { text: "LIGHT", class: "load-light" };
+      if (total <= 15) return { text: "MODERATE", class: "load-moderate" };
+      return { text: "HEAVY", class: "load-heavy" };
+    }
+
+    function updateHistory() {
+      fetch('/history')
+        .then(r => r.json())
+        .then(data => {
+          const tbody = document.getElementById('historyBody');
+          if (data.length === 0) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="5" class="empty-state">
+                  <div class="empty-state-icon">📊</div>
+                  <div>No detection history yet</div>
+                </td>
+              </tr>`;
+            return;
+          }
+          tbody.innerHTML = data.map(cycle => {
+            const phaseClass = cycle.phase.includes('NS') ? 'ns' : 'ew';
+            const phaseLabel = cycle.phase.includes('NS') ? 'N–S' : 'E–W';
+            return `
+              <tr>
+                <td>${cycle.timestamp}</td>
+                <td><span class="phase-badge ${phaseClass}">${phaseLabel}</span></td>
+                <td>${cycle.vehicle_ns}</td>
+                <td>${cycle.vehicle_ew}</td>
+                <td>${cycle.green_time}s</td>
+              </tr>`;
+          }).join('');
+        })
+        .catch(e => console.error('History update failed:', e));
+    }
+
+    async function updateStatus() {
+      try {
+        const res = await fetch('/status');
+        if (!res.ok) throw new Error('Status fetch failed');
+        const data = await res.json();
+
+        const ns = data.vehicle_ns || 0;
+        const ew = data.vehicle_ew || 0;
+        const phase = data.phase || "-";
+        const remaining = Math.ceil(data.remaining_time ?? 0);
+        const greenTime = data.green_time ?? "-";
+        const hasImage = data.has_image;
+
+        document.getElementById('vehicleCountNS').textContent = ns;
+        document.getElementById('vehicleCountEW').textContent = ew;
+        document.getElementById('greenTimeMetric').textContent = greenTime + "s";
+        document.getElementById('remainingMetric').textContent = remaining + "s";
+
+        const phaseText = document.getElementById('phaseText');
+        if (phase === "NS") {
+          phaseText.textContent = "North–South";
+          phaseText.style.color = 'var(--blue)';
+        } else if (phase === "EW") {
+          phaseText.textContent = "East–West";
+          phaseText.style.color = 'var(--teal)';
+        } else if (phase === "YELLOW") {
+          phaseText.textContent = "Transition";
+          phaseText.style.color = 'var(--yellow)';
+        } else {
+          phaseText.textContent = "All Stop";
+          phaseText.style.color = 'var(--red)';
+        }
+
+        document.getElementById('remainingTime').textContent = remaining + "s";
+        document.getElementById('greenTime').textContent = greenTime + "s";
+
+        const imgEl = document.getElementById('trafficImage');
+        const placeholder = document.getElementById('videoPlaceholder');
+        const overlay = document.getElementById('videoOverlay');
+        const statusEl = document.getElementById('cameraStatus');
+
+        if (hasImage && imgEl && placeholder) {
+          imgEl.src = '/image?ts=' + Date.now();
+          imgEl.onload = function() {
+            imgEl.style.display = 'block';
+            placeholder.style.display = 'none';
+          };
+          if (overlay) overlay.style.display = 'flex';
+          if (statusEl) {
+            statusEl.textContent = '● LIVE';
+            statusEl.className = 'feed-status-badge live';
+          }
+
+          const multiImg = document.getElementById('multiCamImage');
+          if (multiImg) multiImg.src = '/image?ts=' + Date.now();
+        } else if (imgEl && placeholder) {
+          imgEl.style.display = 'none';
+          placeholder.style.display = 'flex';
+          if (overlay) overlay.style.display = 'none';
+          if (statusEl) {
+            statusEl.textContent = 'OFFLINE';
+            statusEl.className = 'feed-status-badge offline';
+          }
+        }
+
+        if (data.emergency_detected) {
+          updateEmergencyDisplay({
+            emergency_detected: true,
+            emergency_type: data.emergency_type,
+            confidence: data.emergency_confidence,
+            priority_direction: 'NS'
+          });
+        }
+
+        updateTrafficLight(phase);
+      } catch (e) {
+        console.error(e);
+        const camStatus = document.getElementById('cameraStatus');
+        if (camStatus) {
+          camStatus.textContent = 'OFFLINE';
+          camStatus.className = 'feed-status-badge offline';
+        }
+      }
+    }
+
+    updateStatus();
+    updateHistory();
+    setInterval(updateStatus, 1000);
+    setInterval(updateHistory, 10000);
+
+    // ========================================
+    // VIDEO SOURCE SWITCHING
+    // ========================================
+    const sourceType = document.getElementById('sourceType');
+    const fileWrapper = document.getElementById('fileWrapper');
+    const selectVideoBtn = document.getElementById('selectVideoBtn');
+    const videoFileInput = document.getElementById('videoFileInput');
+    const videoFileName = document.getElementById('videoFileName');
+    const applySourceBtn = document.getElementById('applySourceBtn');
+    const stopSourceBtn = document.getElementById('stopSourceBtn');
+    const sourceStatus = document.getElementById('sourceStatus');
+    const sourceStatusText = document.getElementById('sourceStatusText');
+
+    let selectedVideoPath = null;
+
+    sourceType.addEventListener('change', function() {
+      const speedControl = document.getElementById('speedControl');
+      if (this.value === 'video') {
+        fileWrapper.style.display = 'inline-flex';
+        speedControl.style.display = 'flex';
+      } else {
+        fileWrapper.style.display = 'none';
+        speedControl.style.display = 'none';
+        selectedVideoPath = null;
+        videoFileName.textContent = '';
+      }
+    });
+
+    const skipFramesSlider = document.getElementById('skipFramesSlider');
+    const speedLabel = document.getElementById('speedLabel');
+    const speedLabels = { 1: 'Accurate', 2: 'Normal', 3: 'Fast', 4: 'Faster', 5: 'Fastest' };
+
+    skipFramesSlider.addEventListener('input', function() {
+      speedLabel.textContent = speedLabels[this.value] || 'Normal';
+    });
+
+    selectVideoBtn.addEventListener('click', () => videoFileInput.click());
+
+    videoFileInput.addEventListener('change', function() {
+      if (this.files.length > 0) {
+        const file = this.files[0];
+        videoFileName.textContent = '📎 ' + file.name;
+
+        const formData = new FormData();
+        formData.append('video', file);
+
+        sourceStatus.style.display = 'flex';
+        sourceStatus.className = 'source-status-msg info';
+        sourceStatusText.textContent = '⏳ Uploading video...';
+
+        fetch('/upload_video', { method: 'POST', body: formData })
+          .then(r => r.json())
+          .then(data => {
+            if (data.success) {
+              selectedVideoPath = data.path;
+              sourceStatus.className = 'source-status-msg success';
+              sourceStatusText.textContent = '✅ Ready: ' + data.filename;
+            } else {
+              sourceStatus.className = 'source-status-msg error';
+              sourceStatusText.textContent = '❌ Upload failed';
+            }
+          })
+          .catch(e => {
+            sourceStatus.className = 'source-status-msg error';
+            sourceStatusText.textContent = '❌ Error: ' + e.message;
+          });
+      }
+    });
+
+    applySourceBtn.addEventListener('click', function() {
+      const type = sourceType.value;
+      let source = type === 'webcam' ? '0' : selectedVideoPath;
+
+      if (type === 'video' && !selectedVideoPath) {
+        sourceStatus.style.display = 'flex';
+        sourceStatus.className = 'source-status-msg warning';
+        sourceStatusText.textContent = '⚠️ Please select a video file first';
+        return;
+      }
+
+      sourceStatus.style.display = 'flex';
+      sourceStatus.className = 'source-status-msg info';
+      sourceStatusText.textContent = '⏳ Starting detection...';
+
+      const skipFrames = type === 'video' ? parseInt(document.getElementById('skipFramesSlider').value) : 1;
+
+      fetch('/start_detection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: source, type: type, skip_frames: skipFrames })
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            sourceStatus.className = 'source-status-msg success';
+            sourceStatusText.textContent = '✅ Detection running';
+            document.getElementById('systemStatus').textContent = 'Detection Active';
+          } else {
+            sourceStatus.className = 'source-status-msg error';
+            sourceStatusText.textContent = '❌ ' + data.error;
+          }
+        })
+        .catch(e => {
+          sourceStatus.className = 'source-status-msg error';
+          sourceStatusText.textContent = '❌ ' + e.message;
+        });
+    });
+
+    stopSourceBtn.addEventListener('click', function() {
+      sourceStatus.style.display = 'flex';
+      sourceStatus.className = 'source-status-msg info';
+      sourceStatusText.textContent = '⏳ Stopping...';
+
+      fetch('/stop_detection', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          sourceStatus.className = 'source-status-msg info';
+          sourceStatusText.textContent = '⏹ Detection stopped';
+          document.getElementById('systemStatus').textContent = 'System Ready';
+        })
+        .catch(e => {
+          sourceStatusText.textContent = '⏹ Stopped';
+        });
+    });
+
+    fetch('/detection_status')
+      .then(r => r.json())
+      .then(data => {
+        if (data.running) {
+          sourceStatus.style.display = 'flex';
+          sourceStatus.className = 'source-status-msg success';
+          sourceStatusText.textContent = '✅ Detection running: ' + (data.type === 'webcam' ? 'Webcam' : 'Video');
+          document.getElementById('systemStatus').textContent = 'Detection Active';
+        }
+      })
+      .catch(() => {});
+
+    // ========================================
+    // ANALYTICS CHARTS
+    // ========================================
+    let hourlyChart = null;
+    let weeklyChart = null;
+
+    function refreshAnalytics() {
+      loadTodayStats();
+      loadHourlyChart();
+      loadWeeklyData();
+    }
+
+    async function loadTodayStats() {
+      try {
+        const res = await fetch('/api/stats/today');
+        const data = await res.json();
+        document.getElementById('statTotalVehicles').textContent = data.total_vehicles || 0;
+        document.getElementById('statNS').textContent = data.total_ns || 0;
+        document.getElementById('statEW').textContent = data.total_ew || 0;
+        document.getElementById('statRecords').textContent = data.total_records || 0;
+      } catch (e) {
+        console.error('Failed to load today stats:', e);
+      }
+    }
+
+    async function loadHourlyChart(date = null) {
+      try {
+        const url = date ? `/api/stats/hourly?date=${date}` : '/api/stats/hourly';
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const hours = [], nsData = [], ewData = [];
+        for (let i = 0; i < 24; i++) {
+          hours.push(i.toString().padStart(2, '0') + ':00');
+          const hourData = data.find(d => parseInt(d.hour) === i);
+          nsData.push(hourData ? hourData.ns_count : 0);
+          ewData.push(hourData ? hourData.ew_count : 0);
+        }
+
+        const ctx = document.getElementById('hourlyChart').getContext('2d');
+        if (hourlyChart) hourlyChart.destroy();
+
+        hourlyChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: hours,
+            datasets: [
+              { label: 'North-South', data: nsData, backgroundColor: 'rgba(10, 132, 255, 0.7)', borderColor: '#0a84ff', borderWidth: 1, borderRadius: 4 },
+              { label: 'East-West', data: ewData, backgroundColor: 'rgba(100, 210, 255, 0.7)', borderColor: '#64d2ff', borderWidth: 1, borderRadius: 4 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top', labels: { font: { family: 'Inter' } } } },
+            scales: {
+              y: { beginAtZero: true, title: { display: true, text: 'Vehicle Count' }, grid: { color: '#f0f0f0' } },
+              x: { title: { display: true, text: 'Hour of Day' }, grid: { display: false } }
+            }
+          }
+        });
+      } catch (e) {
+        console.error('Failed to load hourly chart:', e);
+      }
+    }
+
+    async function loadWeeklyData() {
+      try {
+        const res = await fetch('/api/stats/weekly');
+        const data = await res.json();
+
+        const tbody = document.getElementById('weeklyTableBody');
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">No data available</td></tr>';
+        } else {
+          tbody.innerHTML = data.map(row => `
+            <tr>
+              <td>${row.date}</td>
+              <td>${row.total_vehicles || 0}</td>
+              <td>${row.total_ns || 0}</td>
+              <td>${row.total_ew || 0}</td>
+              <td>${row.records || 0}</td>
+            </tr>
+          `).join('');
+        }
+
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        if (weeklyChart) weeklyChart.destroy();
+
+        const dates = data.map(d => d.date).reverse();
+        const totals = data.map(d => d.total_vehicles || 0).reverse();
+
+        weeklyChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [{
+              label: 'Total Vehicles',
+              data: totals,
+              borderColor: '#0a84ff',
+              backgroundColor: 'rgba(10, 132, 255, 0.08)',
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: '#0a84ff',
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f0f0f0' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      } catch (e) {
+        console.error('Failed to load weekly data:', e);
+      }
+    }
+
+    // ========================================
+    // EXPORT FUNCTIONS
+    // ========================================
+    function setDefaultDates() {
+      const today = new Date().toISOString().split('T')[0];
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      document.getElementById('csvStartDate').value = weekAgo;
+      document.getElementById('csvEndDate').value = today;
+      document.getElementById('pdfStartDate').value = weekAgo;
+      document.getElementById('pdfEndDate').value = today;
+    }
+
+    function exportCSV() {
+      const start = document.getElementById('csvStartDate').value;
+      const end = document.getElementById('csvEndDate').value;
+      let url = '/export/csv';
+      if (start || end) {
+        const params = new URLSearchParams();
+        if (start) params.append('start', start);
+        if (end) params.append('end', end);
+        url += '?' + params.toString();
+      }
+      window.location.href = url;
+    }
+
+    function exportPDF() {
+      const start = document.getElementById('pdfStartDate').value;
+      const end = document.getElementById('pdfEndDate').value;
+      let url = '/export/pdf';
+      if (start || end) {
+        const params = new URLSearchParams();
+        if (start) params.append('start', start);
+        if (end) params.append('end', end);
+        url += '?' + params.toString();
+      }
+      window.location.href = url;
+    }
+
+    async function loadExportInfo() {
+      setDefaultDates();
+      try {
+        const res = await fetch('/api/history/detection?limit=1000');
+        const data = await res.json();
+        document.getElementById('dbTotalRecords').textContent = data.length;
+        if (data.length > 0) {
+          document.getElementById('dbLastRecord').textContent = data[0].timestamp?.split(' ')[0] || '—';
+          document.getElementById('dbFirstRecord').textContent = data[data.length - 1].timestamp?.split(' ')[0] || '—';
+        }
+      } catch (e) {
+        console.error('Failed to load export info:', e);
+      }
+    }
+
+    setDefaultDates();
+
+    // ========================================
+    // EMERGENCY DETECTION
+    // ========================================
+    let emergencyActive = false;
+
+    async function checkEmergencyStatus() {
+      try {
+        const res = await fetch('/api/emergency/status');
+        const data = await res.json();
+        if (data.emergency_detected && !emergencyActive) showEmergencyAlert(data);
+        else if (!data.emergency_detected && emergencyActive) hideEmergencyAlert();
+        updateEmergencyDisplay(data);
+      } catch (e) {
+        console.error('Emergency status check failed:', e);
+      }
+    }
+
+    function showEmergencyAlert(data) {
+      emergencyActive = true;
+      const alert = document.getElementById('emergencyAlert');
+      const details = document.getElementById('emergencyDetails');
+      details.textContent = `${data.emergency_type || 'Emergency vehicle'} detected! Priority signal activated. Confidence: ${Math.round((data.confidence || 0) * 100)}%`;
+      alert.classList.add('active');
+      try {
+        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleD0PLI7e6LVkJgMphNT0+51TChiE1PL6oFgHEYXY9fykWgQNit37/qhcAwuN4P7+q14CCpHi//+tYAEIlOT//69hAQeW5v//sWIBBpjo//+yYwEFmun//7RkAQSb6///tWUBBJzr//+2ZgEDnez//7hnAQOe7f//uWgBA5/u//+6aQEDoPD//7tqAQKh8f//vGsBAqLy//+9bAECo/P//75tAQKk9P//v24BAqX1//+/bwECpvb//8BwAQKn9///wXEBAqj4///BcgECqfn//8JzAQKq+v//w3QBAqv7///EdQECrPz//8V2AQKt/f//xncBAq7+///HeAECrv///8h5AQKv////yXoBAq/////KewECsP///8t8AQKw////zH0BArH////NfgECsf///85/AQKy////z4ABAg==');
+        audio.volume = 0.3;
+        audio.play().catch(() => {});
+      } catch (e) {}
+    }
+
+    function hideEmergencyAlert() {
+      emergencyActive = false;
+      document.getElementById('emergencyAlert').classList.remove('active');
+    }
+
+    function updateEmergencyDisplay(data) {
+      const statusEl = document.getElementById('emergencyStatus');
+      const confidenceEl = document.getElementById('emergencyConfidence');
+      const directionEl = document.getElementById('emergencyDirection');
+      const priorityEl = document.getElementById('priorityIndicator');
+
+      if (statusEl) {
+        if (data.emergency_detected) {
+          statusEl.textContent = data.emergency_type || 'ALERT';
+          statusEl.style.color = 'var(--red)';
+          if (priorityEl) priorityEl.style.display = 'inline-flex';
+        } else {
+          statusEl.textContent = 'Normal';
+          statusEl.style.color = 'var(--green)';
+          if (priorityEl) priorityEl.style.display = 'none';
+        }
+      }
+      if (confidenceEl) confidenceEl.textContent = Math.round((data.confidence || 0) * 100) + '%';
+      if (directionEl) directionEl.textContent = data.priority_direction || '—';
+    }
+
+    document.getElementById('dismissEmergency')?.addEventListener('click', () => hideEmergencyAlert());
+    document.getElementById('acknowledgeEmergency')?.addEventListener('click', async () => {
+      try { await fetch('/api/emergency/acknowledge', { method: 'POST' }); hideEmergencyAlert(); }
+      catch (e) { console.error('Failed to acknowledge emergency:', e); }
+    });
+
+    async function testEmergency() {
+      try {
+        const types = ['Ambulance', 'Fire Truck', 'Police Vehicle'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        await fetch('/api/emergency/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type }) });
+        await checkEmergencyStatus();
+      } catch (e) { console.error('Test emergency failed:', e); }
+    }
+
+    async function clearEmergency() {
+      try { await fetch('/api/emergency/acknowledge', { method: 'POST' }); hideEmergencyAlert(); await checkEmergencyStatus(); }
+      catch (e) { console.error('Failed to clear emergency:', e); }
+    }
+
+    setInterval(checkEmergencyStatus, 2000);
+
+    // ========================================
+    // MULTI-CAMERA MANAGEMENT
+    // ========================================
+    let cameras = [];
+    let activeCamera = 'cam_main';
+
+    async function refreshCameras() {
+      try {
+        const res = await fetch('/api/cameras');
+        const data = await res.json();
+        cameras = data.cameras || [];
+        activeCamera = data.active_camera;
+        updateCameraGrid();
+        updateCameraStats();
+      } catch (e) { console.error('Failed to refresh cameras:', e); }
+    }
+
+    function updateCameraGrid() {
+      const grid = document.getElementById('cameraGrid');
+      if (!grid) return;
+      grid.innerHTML = cameras.map(cam => `
+        <div class="camera-card ${cam.camera_id === activeCamera ? 'active' : ''} ${cam.emergency_detected ? 'emergency' : ''}"
+             data-camera="${cam.camera_id}" onclick="selectCamera('${cam.camera_id}')">
+          <div class="camera-card-status ${cam.is_active ? 'online' : 'offline'} ${cam.emergency_detected ? 'emergency' : ''}">
+            ${cam.emergency_detected ? '🚨 ALERT' : (cam.is_active ? 'LIVE' : 'OFFLINE')}
+          </div>
+          <div class="camera-card-label">${cam.name || cam.camera_id}<br><small>${cam.intersection || ''}</small></div>
+        </div>
+      `).join('');
+    }
+
+    function updateCameraStats() {
+      const activeCount = cameras.filter(c => c.is_active).length;
+      const emergencyCount = cameras.filter(c => c.emergency_detected).length;
+      const activeCamEl = document.getElementById('activeCameraCount');
+      const totalCamEl = document.getElementById('totalCameraCount');
+      const emergencyEl = document.getElementById('emergencyAlertCount');
+      if (activeCamEl) activeCamEl.textContent = activeCount;
+      if (totalCamEl) totalCamEl.textContent = cameras.length;
+      if (emergencyEl) emergencyEl.textContent = emergencyCount;
+    }
+
+    async function selectCamera(cameraId) {
+      try {
+        await fetch('/api/cameras/select', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ camera_id: cameraId }) });
+        activeCamera = cameraId;
+        const cam = cameras.find(c => c.camera_id === cameraId);
+        const titleEl = document.getElementById('activeCameraTitle');
+        if (titleEl && cam) titleEl.textContent = cam.name || cameraId;
+        refreshCameras();
+      } catch (e) { console.error('Failed to select camera:', e); }
+    }
+
+    function openAddCameraModal() { document.getElementById('addCameraModal').classList.add('active'); }
+    function closeAddCameraModal() { document.getElementById('addCameraModal').classList.remove('active'); }
+
+    document.getElementById('closeAddCamera')?.addEventListener('click', closeAddCameraModal);
+    document.getElementById('cancelAddCamera')?.addEventListener('click', closeAddCameraModal);
+
+    document.getElementById('newCameraType')?.addEventListener('change', (e) => {
+      const type = e.target.value;
+      document.getElementById('webcamSourceGroup').style.display = type === 'webcam' ? 'block' : 'none';
+      document.getElementById('videoSourceGroup').style.display = type === 'video' ? 'block' : 'none';
+      document.getElementById('rtspSourceGroup').style.display = type === 'rtsp' ? 'block' : 'none';
+    });
+
+    document.getElementById('confirmAddCamera')?.addEventListener('click', async () => {
+      const name = document.getElementById('newCameraName').value || 'New Camera';
+      const intersection = document.getElementById('newCameraIntersection').value || '';
+      const type = document.getElementById('newCameraType').value;
+      let source;
+      if (type === 'webcam') source = document.getElementById('newCameraWebcamIndex').value;
+      else if (type === 'video') source = document.getElementById('newCameraVideoPath').value;
+      else if (type === 'rtsp') source = document.getElementById('newCameraRtspUrl').value;
+
+      try {
+        const res = await fetch('/api/cameras/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, intersection, type, source }) });
+        const data = await res.json();
+        if (data.success) {
+          closeAddCameraModal();
+          refreshCameras();
+          document.getElementById('newCameraName').value = '';
+          document.getElementById('newCameraIntersection').value = '';
+        } else {
+          alert('Failed to add camera: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) { console.error('Failed to add camera:', e); alert('Failed to add camera'); }
+    });
+
+    function addVideoCamera() {
+      document.getElementById('newCameraType').value = 'video';
+      document.getElementById('webcamSourceGroup').style.display = 'none';
+      document.getElementById('videoSourceGroup').style.display = 'block';
+      document.getElementById('rtspSourceGroup').style.display = 'none';
+      openAddCameraModal();
+    }
+
+    document.getElementById('addCameraModal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'addCameraModal') closeAddCameraModal();
+    });
+
+    refreshCameras();
+    setInterval(refreshCameras, 5000);
+
+    // ========================================
+    // SIGNAL CYCLE CONTROLLER
+    // ========================================
+    let signalCycleRunning = false;
+    let signalPollInterval = null;
+
+    async function startSignalCycle() {
+      const vehicleThreshold = parseInt(document.getElementById('vehicleThreshold').value) || 30;
+      const maxDetectionTime = parseInt(document.getElementById('maxDetectionTime').value) || 60;
+      const srcType = document.getElementById('sourceType').value;
+      let source = srcType === 'webcam' ? '0' : selectedVideoPath;
+
+      if (srcType === 'video' && !selectedVideoPath) {
+        alert('Please select a video file first before starting the signal cycle.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/signal/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ vehicle_threshold: vehicleThreshold, max_detection_time: maxDetectionTime, source: source, type: srcType })
+        });
+        const data = await res.json();
+        if (data.success) {
+          signalCycleRunning = true;
+          document.getElementById('startCycleBtn').disabled = true;
+          document.getElementById('stopCycleBtn').disabled = false;
+          document.getElementById('cycleProgress').style.display = 'block';
+          document.getElementById('thresholdDisplay').textContent = vehicleThreshold;
+
+          sourceStatus.style.display = 'flex';
+          sourceStatus.className = 'source-status-msg success';
+          sourceStatusText.textContent = '🔄 Signal cycle running — Detection active';
+
+          if (!signalPollInterval) signalPollInterval = setInterval(pollSignalState, 500);
+        }
+      } catch (e) { console.error('Failed to start signal cycle:', e); alert('Failed to start signal cycle'); }
+    }
+
+    async function stopSignalCycle() {
+      try {
+        await fetch('/api/signal/stop', { method: 'POST' });
+        signalCycleRunning = false;
+        document.getElementById('startCycleBtn').disabled = false;
+        document.getElementById('stopCycleBtn').disabled = true;
+        document.getElementById('cycleProgress').style.display = 'none';
+        document.getElementById('bulbRed').classList.remove('active');
+        document.getElementById('bulbYellow').classList.remove('active');
+        document.getElementById('bulbGreen').classList.remove('active');
+        document.getElementById('phaseText').textContent = '—';
+        document.getElementById('phaseText').style.color = '';
+        document.getElementById('remainingTime').textContent = '—';
+        document.getElementById('greenTime').textContent = '—';
+        document.getElementById('cycleStatusBadge').textContent = 'IDLE';
+      } catch (e) { console.error('Failed to stop signal cycle:', e); }
+    }
+
+    async function pollSignalState() {
+      try {
+        const res = await fetch('/api/signal/state');
+        const state = await res.json();
+        updateSignalDisplay(state);
+      } catch (e) { console.error('Failed to poll signal state:', e); }
+    }
+
+    function updateSignalDisplay(state) {
+      const { phase, direction, remaining_time, total_time, vehicle_count, cycle_count, message } = state;
+
+      const badge = document.getElementById('cycleStatusBadge');
+      if (phase === 'idle') { badge.textContent = 'IDLE'; badge.style.background = 'rgba(10, 132, 255, 0.1)'; badge.style.color = 'var(--blue)'; }
+      else if (phase === 'detecting') { badge.textContent = 'DETECTING'; badge.style.background = 'rgba(255, 159, 10, 0.15)'; badge.style.color = 'var(--orange)'; }
+      else if (phase === 'green_signal') { badge.textContent = 'GREEN'; badge.style.background = 'rgba(48, 209, 88, 0.15)'; badge.style.color = 'var(--green)'; }
+      else if (phase === 'red_signal') { badge.textContent = 'RED'; badge.style.background = 'rgba(255, 69, 58, 0.15)'; badge.style.color = 'var(--red)'; }
+      else if (phase === 'yellow_signal') { badge.textContent = 'YELLOW'; badge.style.background = 'rgba(255, 214, 10, 0.15)'; badge.style.color = 'var(--yellow)'; }
+
+      const redBulb = document.getElementById('bulbRed');
+      const yellowBulb = document.getElementById('bulbYellow');
+      const greenBulb = document.getElementById('bulbGreen');
+      redBulb.classList.remove('active');
+      yellowBulb.classList.remove('active');
+      greenBulb.classList.remove('active');
+      if (phase === 'red_signal') redBulb.classList.add('active');
+      else if (phase === 'yellow_signal') yellowBulb.classList.add('active');
+      else if (phase === 'green_signal') greenBulb.classList.add('active');
+
+      const phaseText = document.getElementById('phaseText');
+      if (phase === 'detecting') { phaseText.textContent = '🔍 Detecting'; phaseText.style.color = 'var(--orange)'; }
+      else if (phase === 'red_signal') { phaseText.textContent = '🔴 STOP'; phaseText.style.color = 'var(--red)'; }
+      else if (phase === 'green_signal') { phaseText.textContent = '🟢 GO'; phaseText.style.color = 'var(--green)'; }
+      else if (phase === 'yellow_signal') { phaseText.textContent = '🟡 WAIT'; phaseText.style.color = 'var(--yellow)'; }
+      else { phaseText.textContent = '—'; phaseText.style.color = ''; }
+
+      document.getElementById('remainingTime').textContent = remaining_time > 0 ? `${remaining_time}s` : '—';
+      document.getElementById('greenTime').textContent = total_time > 0 ? `${total_time}s` : '—';
+      document.getElementById('currentDirection').textContent = direction || '—';
+      document.getElementById('cycleNumber').textContent = cycle_count;
+
+      const threshold = parseInt(document.getElementById('vehicleThreshold').value) || 30;
+      document.getElementById('detectedCount').textContent = vehicle_count;
+
+      const cyclePhaseText = document.getElementById('cyclePhaseText');
+      const progressBar = document.getElementById('cycleProgressBar');
+
+      if (phase === 'detecting') {
+        cyclePhaseText.textContent = `Detecting vehicles... (${vehicle_count}/${threshold})`;
+        const progress = Math.min(100, (vehicle_count / threshold) * 100);
+        progressBar.style.width = `${progress}%`;
+        progressBar.style.background = 'var(--blue)';
+      } else if (phase === 'red_signal') {
+        cyclePhaseText.textContent = `RED Signal — ${remaining_time}s remaining`;
+        const progress = total_time > 0 ? ((total_time - remaining_time) / total_time) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+        progressBar.style.background = 'var(--red)';
+      } else if (phase === 'green_signal') {
+        cyclePhaseText.textContent = `GREEN Signal — ${remaining_time}s remaining`;
+        const progress = total_time > 0 ? ((total_time - remaining_time) / total_time) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+        progressBar.style.background = 'var(--green)';
+      } else if (phase === 'yellow_signal') {
+        cyclePhaseText.textContent = 'YELLOW Signal — Prepare to stop';
+        progressBar.style.width = '100%';
+        progressBar.style.background = 'var(--yellow)';
+      } else {
+        cyclePhaseText.textContent = 'Ready to start';
+        progressBar.style.width = '0%';
+      }
+
+      if (phase !== 'idle') {
+        document.getElementById('cycleProgress').style.display = 'block';
+        document.getElementById('startCycleBtn').disabled = true;
+        document.getElementById('stopCycleBtn').disabled = false;
+      }
+    }
+
+    signalPollInterval = setInterval(pollSignalState, 1000);
+    pollSignalState();
+  </script>
+</body>
+</html>

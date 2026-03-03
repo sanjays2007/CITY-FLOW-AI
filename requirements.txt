@@ -1,0 +1,35 @@
+# Requirements for Smart Traffic Management System
+# With YOLO Tracking Integration from Real-Time-YOLO-Car-Counter
+
+# =============================================================================
+# Core Dependencies
+# =============================================================================
+flask>=2.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# =============================================================================
+# YOLO and Deep Learning
+# =============================================================================
+ultralytics>=8.0.0          # YOLOv8/YOLO11 - object detection
+torch>=2.0.0                # PyTorch backend
+
+# =============================================================================
+# Supervision Library (ByteTrack Tracking)
+# From: https://github.com/Pushtogithub23/Real-Time-YOLO-Car-Counter
+# =============================================================================
+supervision>=0.18.0         # Object tracking, annotation, counting
+
+# =============================================================================
+# Optional but Recommended
+# =============================================================================
+lapx>=0.5.2                 # Linear assignment for tracking optimization
+scipy>=1.10.0               # Scientific computing utilities
+reportlab>=4.0.0            # PDF report generation
+
+# =============================================================================
+# Development/Testing (Optional)
+# =============================================================================
+# pytest>=7.0.0
+# black>=23.0.0
+# flake8>=6.0.0
