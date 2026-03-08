@@ -2421,23 +2421,31 @@
         document.getElementById('greenTimeMetric').textContent = greenTime + "s";
         document.getElementById('remainingMetric').textContent = remaining + "s";
 
-        const phaseText = document.getElementById('phaseText');
-        if (phase === "NS") {
-          phaseText.textContent = "North–South";
-          phaseText.style.color = 'var(--blue)';
-        } else if (phase === "EW") {
-          phaseText.textContent = "East–West";
-          phaseText.style.color = 'var(--teal)';
-        } else if (phase === "YELLOW") {
-          phaseText.textContent = "Transition";
-          phaseText.style.color = 'var(--yellow)';
-        } else {
-          phaseText.textContent = "All Stop";
-          phaseText.style.color = 'var(--red)';
-        }
+        // Only update phase display / traffic light from /status when
+        // the signal cycle is NOT running.  When the cycle IS active,
+        // updateSignalDisplay() (polled at 500 ms via /api/signal/state)
+        // owns these elements and has more accurate data.
+        if (!signalCycleRunning) {
+          const phaseText = document.getElementById('phaseText');
+          if (phase === "NS") {
+            phaseText.textContent = "North–South";
+            phaseText.style.color = 'var(--blue)';
+          } else if (phase === "EW") {
+            phaseText.textContent = "East–West";
+            phaseText.style.color = 'var(--teal)';
+          } else if (phase === "YELLOW") {
+            phaseText.textContent = "Transition";
+            phaseText.style.color = 'var(--yellow)';
+          } else {
+            phaseText.textContent = "All Stop";
+            phaseText.style.color = 'var(--red)';
+          }
 
-        document.getElementById('remainingTime').textContent = remaining + "s";
-        document.getElementById('greenTime').textContent = greenTime + "s";
+          document.getElementById('remainingTime').textContent = remaining + "s";
+          document.getElementById('greenTime').textContent = greenTime + "s";
+
+          updateTrafficLight(phase);
+        }
 
         const imgEl = document.getElementById('trafficImage');
         const placeholder = document.getElementById('videoPlaceholder');
@@ -2477,7 +2485,6 @@
           });
         }
 
-        updateTrafficLight(phase);
       } catch (e) {
         console.error(e);
         const camStatus = document.getElementById('cameraStatus');
@@ -3033,6 +3040,7 @@
       try {
         await fetch('/api/signal/stop', { method: 'POST' });
         signalCycleRunning = false;
+        if (signalPollInterval) { clearInterval(signalPollInterval); signalPollInterval = null; }
         document.getElementById('startCycleBtn').disabled = false;
         document.getElementById('stopCycleBtn').disabled = true;
         document.getElementById('cycleProgress').style.display = 'none';
@@ -3124,8 +3132,21 @@
       }
     }
 
-    signalPollInterval = setInterval(pollSignalState, 1000);
-    pollSignalState();
+    // Check once on page load if a cycle is already running, and start polling only if so
+    (async function checkInitialCycleState() {
+      try {
+        const res = await fetch('/api/signal/state');
+        const state = await res.json();
+        if (state.phase && state.phase !== 'idle') {
+          signalCycleRunning = true;
+          signalPollInterval = setInterval(pollSignalState, 500);
+          updateSignalDisplay(state);
+          document.getElementById('cycleProgress').style.display = 'block';
+          document.getElementById('startCycleBtn').disabled = true;
+          document.getElementById('stopCycleBtn').disabled = false;
+        }
+      } catch (e) { /* no cycle running */ }
+    })();
   </script>
 </body>
 </html>
