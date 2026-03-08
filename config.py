@@ -32,7 +32,7 @@ NIGHT_MULTIPLIER = 0.7    # shorter greens at night
 # =============================================================================
 
 # Model settings
-YOLO_MODEL_PATH = "yolov8n.pt"  # Options: yolov8n.pt, yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
+YOLO_MODEL_PATH = "yolov8x.pt"  # Options: yolov8n.pt, yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
 CONF_THRESHOLD = 0.3            # Detection confidence threshold (0.0 - 1.0)
 IOU_THRESHOLD = 0.45            # NMS IoU threshold (0.0 - 1.0)
 

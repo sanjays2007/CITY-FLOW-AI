@@ -593,12 +593,15 @@ def add_camera():
     intersection = data.get('intersection', '')
     
     try:
+        import time as _time
+        camera_id = f"cam_{source_type}_{int(_time.time())}"
+
         if source_type == 'webcam':
-            camera = camera_manager.add_webcam(name, int(source), intersection)
+            camera = camera_manager.add_camera(camera_id, name, int(source), intersection)
         elif source_type == 'video':
-            camera = camera_manager.add_video_source(name, source, intersection)
+            camera = camera_manager.add_camera(camera_id, name, source, intersection)
         elif source_type == 'rtsp':
-            camera = camera_manager.add_rtsp_source(name, source, intersection)
+            camera = camera_manager.add_camera(camera_id, name, source, intersection)
         else:
             return jsonify({"success": False, "error": "Invalid source type"})
         

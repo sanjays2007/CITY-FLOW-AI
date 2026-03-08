@@ -37,7 +37,7 @@ class AdvancedVideoCounter:
     
     def __init__(
         self,
-        model_path: str = "yolov8n.pt",
+        model_path: str = "yolov8x.pt",
         conf_threshold: float = 0.3,
         iou_threshold: float = 0.45,
     ):
@@ -294,7 +294,7 @@ class AdvancedVideoCounter:
 def process_video(
     source,
     output_path=None,
-    model_path="yolov8n.pt",
+    model_path="yolov8x.pt",
     show_preview=True,
     write_counts=True,
     skip_frames=2,  # Process every Nth frame for speed
@@ -478,8 +478,8 @@ Examples:
                        help="Video source: camera index, file path, or URL")
     parser.add_argument("--output", type=str, default=None,
                        help="Output video path (optional)")
-    parser.add_argument("--model", type=str, default="yolov8n.pt",
-                       help="YOLO model path (default: yolov8n.pt)")
+    parser.add_argument("--model", type=str, default="yolov8x.pt",
+                       help="YOLO model path (default: yolov8x.pt)")
     parser.add_argument("--no-preview", action="store_true",
                        help="Disable preview window")
     parser.add_argument("--no-counts", action="store_true",

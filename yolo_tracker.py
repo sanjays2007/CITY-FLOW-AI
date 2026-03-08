@@ -68,7 +68,7 @@ class YOLOTracker:
     
     def __init__(
         self,
-        model_path: str = "yolov8n.pt",
+        model_path: str = "yolov8x.pt",
         conf_threshold: float = 0.3,
         iou_threshold: float = 0.45,
         track_buffer: int = 30,
@@ -601,7 +601,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="YOLO Vehicle Tracker")
     parser.add_argument("--source", type=str, default="0", help="Video source (file, camera index, or URL)")
-    parser.add_argument("--model", type=str, default="yolov8n.pt", help="YOLO model path")
+    parser.add_argument("--model", type=str, default="yolov8x.pt", help="YOLO model path")
     parser.add_argument("--output", type=str, default=None, help="Output video path")
     parser.add_argument("--conf", type=float, default=0.3, help="Confidence threshold")
     

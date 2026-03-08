@@ -34,15 +34,15 @@ model = None
 if TRACKER_AVAILABLE:
     print("[YOLOv8] Initializing advanced tracker with ByteTrack...")
     tracker = YOLOTracker(
-        model_path="yolov8n.pt",
+        model_path="yolov8x.pt",
         conf_threshold=CONF_THRESHOLD,
         iou_threshold=NMS_IOU_THRESHOLD,
         use_smoothing=True
     )
     print("[YOLOv8] Advanced tracker ready (supervision available: {})".format(SUPERVISION_AVAILABLE))
 else:
-    print("[YOLOv8] loading model yolov8n.pt (basic mode)...")
-    model = YOLO("yolov8n.pt")               # will auto-download first run
+    print("[YOLOv8] loading model yolov8x.pt (basic mode)...")
+    model = YOLO("yolov8x.pt")               # will auto-download first run
     print("[YOLOv8] model ready")
 
 
